@@ -1,7 +1,7 @@
 // Preset DOM elements
 function addDomElements(dom, free_bikes, emty, miles) {
 
-	const wrapperEl = document.querySelector(".wrapper");
+	const wrapperEl = document.querySelector("#list");
 
 	const card = document.createElement("div");
 	const cardH = document.createElement("h1");
@@ -96,7 +96,7 @@ async function getBikeStation() {
 		L.marker([latitude, longitude], {icon: myIcon}).addTo(mymap).bindPopup(stationName + stationUpdatedData + popUpTxt + emptySlots + statDistance );
 	}
 
-	console.log(stationNames)
+	// console.log(stationNames)
 }
 
 // Zoom when station is opened
@@ -104,7 +104,6 @@ mymap.on('popupopen', function(centerMarker) {
 	const zoomLvl = 15;
   let cM = mymap.project(centerMarker.popup._latlng);
   cM.y -= centerMarker.popup._container.clientHeight / zoomLvl
-  // console.log(mymap.unproject(cM));
   mymap.setView(mymap.unproject(cM), zoomLvl, {animate: true});
 });
 
@@ -134,25 +133,45 @@ function find(term) {
   document.getElementById('list').innerHTML = '';
 
   if (term != '') {
-    var ul = document.createElement('ul'); 
+
+		const wrapperEl = document.querySelector("#list");
 
     for (var i = 0; i < stationNames.length; i++) {
-        if (stationNames[i].includes(term)) {
-            var li = document.createElement('li');
-            ul.appendChild(li);
-            li.innerHTML = stationNames[i];
-            li.setAttribute('onclick', 'showValue(this)');   // ATTACH AN EVENT.
-        }
+      if (stationNames[i].includes(term)) {
+
+      	let cardResult = document.createElement("div");
+        let cardHeader = document.createElement("h1");
+
+				cardResult.classList.add("card");
+				cardHeader.classList.add("card-header");
+
+    		wrapperEl.appendChild(cardResult);
+    		cardResult.appendChild(cardHeader);
+
+        cardHeader.innerHTML = stationNames[i];
+      }
     }
-    document.getElementById('list').appendChild(ul);
+    document.getElementById('list').appendChild(cardResult);
   } else
 	  document.getElementById('list').innerHTML = '';
+		
+	  // load the gif if clear search
+		ReplacingImage();
 	}
 
 	function showValue(ele) {
-  var t = document.getElementById('tbFind');
-  t.value = ele.innerHTML;
-  document.getElementById('list').innerHTML = '';
+	  let t = document.getElementById('tbFind');
+	  t.value = ele.innerHTML;
+	  document.getElementById('list').innerHTML = '';
+}
+
+function ReplacingImage(){
+		const wrapperEl = document.querySelector("#list");
+		let imgLd = "https://static1.squarespace.com/static/52797d42e4b01f648b9e8392/t/573a04ee20c64748a03438e2/1463420149374/biker-animation-square.gif?format=1000w";
+    wrapperEl.innerHTML += '<img src="'+imgLd+'" />';
+
+		// JSON array for search
+		
 }
 
 getBikeStation()
