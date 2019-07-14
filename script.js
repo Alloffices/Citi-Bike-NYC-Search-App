@@ -54,7 +54,7 @@ const api_url = 'http://api.citybik.es/v2/networks/citi-bike-nyc';
 let bikeStations = 50;
 
 // JSON array for search
-const stationNames = []
+let stationNames = []
 
 async function getBikeStation() {
   const response = await fetch(api_url)
@@ -99,12 +99,12 @@ async function getBikeStation() {
 	// console.log(stationNames)
 }
 
-// Zoom when station is opened
 mymap.on('popupopen', function(centerMarker) {
 	const zoomLvl = 15;
   let cM = mymap.project(centerMarker.popup._latlng);
   cM.y -= centerMarker.popup._container.clientHeight / zoomLvl
   mymap.setView(mymap.unproject(cM), zoomLvl, {animate: true});
+	
 });
 
 // Reset zoom when station blurb is closed
@@ -154,9 +154,9 @@ function find(term) {
     document.getElementById('list').appendChild(cardResult);
   } else
 	  document.getElementById('list').innerHTML = '';
-		
-	  // load the gif if clear search
-		ReplacingImage();
+
+	  ese()
+	  ReplacingImage()
 	}
 
 	function showValue(ele) {
@@ -165,13 +165,22 @@ function find(term) {
 	  document.getElementById('list').innerHTML = '';
 }
 
-function ReplacingImage(){
-		const wrapperEl = document.querySelector("#list");
-		let imgLd = "https://static1.squarespace.com/static/52797d42e4b01f648b9e8392/t/573a04ee20c64748a03438e2/1463420149374/biker-animation-square.gif?format=1000w";
-    wrapperEl.innerHTML += '<img src="'+imgLd+'" />';
+function ese() {
+	empty()
+	getBikeStation()
+}
 
-		// JSON array for search
-		
+// Empty bike station array
+function empty() {stationNames = []} empty();
+
+function ReplacingImage(){
+	const wrapperEl = document.querySelector(".wrapper");
+	let imgLd = "https://media1.giphy.com/media/3o6Ztn5Du98sxh2h7G/giphy.gif";
+  wrapperEl.innerHTML += '<img id="image_X" src="'+imgLd+'" />';
+  var imgf = document.getElementById("image_X");
+	setTimeout(function() {
+	    wrapperEl.removeChild(imgf)
+	}, 800);
 }
 
 getBikeStation()
