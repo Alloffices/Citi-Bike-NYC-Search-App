@@ -12,16 +12,45 @@
 	integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
 	crossorigin=""></script>
 	<style>
-	body {margin:0;padding:0;}
-	.container { display:flex; justify-content:space-between; }
-	.wrapper {width:90%;margin:0 auto;background:#eee;margin-top:1em;height:auto;}
-	#mapid { width:60%; height: 100vh;}
-	#statLoc {width:40%; height: 100vh;}
+		body {margin:0;padding:0;}
+		.container {display:flex;justify-content:space-between;}
+		.wrapper {width:90%;margin:0 auto;margin-top:1em;height:95vh;overflow:scroll;}
+		#mapid {width:60%;height:100vh;}
+		#statLoc {width:40%;height:100vh;}
+		.card {
+			padding:1em;
+			margin-bottom:1em;
+			border-radius:4px;
+			cursor:pointer;
+			transition: border .8s ease;
+			border:1px solid #dddfe6;
+		}
+		h1.card-header {
+			margin:0;
+			font-size: 18px;
+		}
+		p.card-free-bikes,
+		p.card-emty-slots,
+		p.card-station-distance {
+	    font-size: 12px;
+	    text-transform: uppercase;
+	    color: #52616a;
+	    margin-bottom:0;
+		}
+		.card:hover {
+			border:1px solid #9055A2;
+		}
 	</style>
 </head>
 <body>
 	<div class="container">
-		<div id="statLoc"><div class="wrapper">test</div></div>
+		<div id="statLoc">
+			<div class="search-station">
+		    <input id="tbFind" placeholder='Enter search term' onkeyup="find(this.value)" />
+		    <div id="list"></div>
+			</div>
+			<div class="wrapper"></div>
+		</div>
 		<div id="mapid"></div>
 	</div>
     <script  src="./script.js"></script>

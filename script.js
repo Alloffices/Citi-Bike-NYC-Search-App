@@ -1,3 +1,31 @@
+// Preset DOM elements
+function addDomElements(dom, free_bikes, emty, miles) {
+
+	const wrapperEl = document.querySelector(".wrapper");
+
+	const card = document.createElement("div");
+	const cardH = document.createElement("h1");
+	const cardP = document.createElement("p");
+	const cardPemty = document.createElement("p");
+	const cardPm = document.createElement("p");
+
+	let cardEl = wrapperEl.appendChild(card);
+	let cardHead = card.appendChild(cardH);
+	let cardPar = card.appendChild(cardP);
+	let cardPem = card.appendChild(cardPemty);
+	let cardPmiles = card.appendChild(cardPm);
+
+	cardEl.classList.add("card");
+	cardHead.classList.add("card-header");
+	cardPar.classList.add("card-free-bikes");
+	cardPem.classList.add("card-emty-slots");
+	cardPmiles.classList.add("card-station-distance");
+
+	cardHead.innerHTML = dom;
+	cardPar.innerHTML = "Available Bikes: " +free_bikes;
+	cardPem.innerHTML = "Emty Slots: " +emty;
+	cardPmiles.innerHTML = "Station is: " +miles+ " miles away";
+}
 
 // API URL: http://api.citybik.es/v2/networks/citi-bike-nyc
 
@@ -23,7 +51,10 @@ myUserIcon = L.icon({iconUrl: 'https://i.graphicmama.com/uploads/2019/5/5cf0f355
 const api_url = 'http://api.citybik.es/v2/networks/citi-bike-nyc';
 
 // Amount of stations we will search
-let bikeStations = 200;
+let bikeStations = 50;
+
+// JSON array for search
+const stationNames = []
 
 async function getBikeStation() {
   const response = await fetch(api_url)
@@ -45,6 +76,10 @@ async function getBikeStation() {
 		// Name of station
 	  const stationName =  "<b>Location:</b> "+''+data.network.stations[i].name+' '+"<br />";
 
+		// Pushes station location names ( to => stationNames ) and converts to lowercase
+		let sN = data.network.stations[i].name.toLowerCase()
+		stationNames.push(sN)
+
 	  // Available bikes at station
 	  const popUpTxt = "<b>Available Bikes:</b> "+''+data.network.stations[i].free_bikes+' '+"<br />";
 
@@ -54,10 +89,14 @@ async function getBikeStation() {
 	  // Empty slots available at station
 	  const emptySlots = "<b>Empty Slots:</b> "+''+data.network.stations[i].empty_slots+' '+"<br />";
 
+		// Append station in wrapper cards
+	  await addDomElements(data.network.stations[i].name, data.network.stations[i].free_bikes, data.network.stations[i].empty_slots, milesAway)
+
 		// Displays each marker on map
-		L.marker([latitude, longitude], {icon: myIcon}).addTo(mymap).bindPopup(stationName + stationUpdatedData + popUpTxt + emptySlots + statDistance);
+		L.marker([latitude, longitude], {icon: myIcon}).addTo(mymap).bindPopup(stationName + stationUpdatedData + popUpTxt + emptySlots + statDistance );
 	}
 
+	console.log(stationNames)
 }
 
 // Zoom when station is opened
@@ -88,6 +127,32 @@ function convertMetersToFeet(meters) {
 // Converts meters into Miles
 function getMiles(i) {
 	return i*0.000621371192;
+}
+
+// Search Stations With Recomendations
+function find(term) {
+  document.getElementById('list').innerHTML = '';
+
+  if (term != '') {
+    var ul = document.createElement('ul'); 
+
+    for (var i = 0; i < stationNames.length; i++) {
+        if (stationNames[i].includes(term)) {
+            var li = document.createElement('li');
+            ul.appendChild(li);
+            li.innerHTML = stationNames[i];
+            li.setAttribute('onclick', 'showValue(this)');   // ATTACH AN EVENT.
+        }
+    }
+    document.getElementById('list').appendChild(ul);
+  } else
+	  document.getElementById('list').innerHTML = '';
+	}
+
+	function showValue(ele) {
+  var t = document.getElementById('tbFind');
+  t.value = ele.innerHTML;
+  document.getElementById('list').innerHTML = '';
 }
 
 getBikeStation()
