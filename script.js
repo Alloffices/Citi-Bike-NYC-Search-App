@@ -63,8 +63,11 @@ function locate() {
   L.marker(userLocation, {icon: myUserIcon}).addTo(mymap);
 }
 
+
+
+
 var from = mymap.latLngToLayerPoint([40.7289254,-73.9790508])
-var to = mymap.latLngToLayerPoint([40.7289954,-73.9999508])
+var to = mymap.latLngToLayerPoint([40.7289954,-79.9999508])
 var meters = from.distanceTo(to)
 
 function convertMetersToFeet(meters) {
@@ -74,7 +77,14 @@ function convertMetersToFeet(meters) {
 		return (meters/0.3048).toFixed(0);
 	}
 }
+function getMiles(i) {
+     return i*0.000621371192;
+}
+console.log(getMiles(meters) + " Miles")
 console.log(convertMetersToFeet(meters) + "ft")
+
+
+
 
 getBikeStation()
 
