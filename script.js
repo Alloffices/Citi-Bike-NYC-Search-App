@@ -2,10 +2,12 @@
 // API URL: http://api.citybik.es/v2/networks/citi-bike-nyc
 
 const nycLocation = [40.7289254,-73.9790508];
-const userLocation = [40.786,-73.9665];
+const userLocation = [40.786, -73.9765];
 
 // Initial Map View
 const mymap = L.map('mapid').setView(nycLocation, 12);
+
+const from = mymap.latLngToLayerPoint(userLocation)
 
 // Sets map tile template
 L.tileLayer('https://maps.heigit.org/openmapsurfer/tiles/roads/webmercator/{z}/{x}/{y}.png', {
@@ -26,21 +28,36 @@ let bikeStations = 200;
 async function getBikeStation() {
   const response = await fetch(api_url)
   const data = await response.json()
+
 	for (var i = 0; i < bikeStations; i++) {
 	  // Create constant with Lat and Long of each station
 	  const { latitude, longitude } = data.network.stations[i]
+
 	  // Gets distances from user and bike station
+	  let to = mymap.latLngToLayerPoint([latitude, longitude])
+
+		// Where `1` below is the amount you want to move it.
+		let meters = from.distanceTo(to) // Calculates distances between two points in meters
+		var milesAway = getMiles(meters).toFixed(3); // Converts meters between 2 points into miles
+		milesAway /= Math.pow(10, -2); // moves the decimal place 2 points to the right
+		let statDistance = "<b>Station is: </b>" + milesAway + " Miles away";
+
 		// Name of station
 	  const stationName =  "<b>Location:</b> "+''+data.network.stations[i].name+' '+"<br />";
+
 	  // Available bikes at station
 	  const popUpTxt = "<b>Available Bikes:</b> "+''+data.network.stations[i].free_bikes+' '+"<br />";
+
 	  // Data updated at this station
 	  const stationUpdatedData = "<b>Updated Data:</b> "+''+data.network.stations[i].timestamp.slice(0, -17)+' '+"<br />";
+
 	  // Empty slots available at station
 	  const emptySlots = "<b>Empty Slots:</b> "+''+data.network.stations[i].empty_slots+' '+"<br />";
+
 		// Displays each marker on map
-		L.marker([latitude, longitude], {icon: myIcon}).addTo(mymap).bindPopup(stationName + stationUpdatedData + popUpTxt + emptySlots);
+		L.marker([latitude, longitude], {icon: myIcon}).addTo(mymap).bindPopup(stationName + stationUpdatedData + popUpTxt + emptySlots + statDistance);
 	}
+
 }
 
 // Zoom when station is opened
@@ -48,7 +65,7 @@ mymap.on('popupopen', function(centerMarker) {
 	const zoomLvl = 15;
   let cM = mymap.project(centerMarker.popup._latlng);
   cM.y -= centerMarker.popup._container.clientHeight / zoomLvl
-  console.log(mymap.unproject(cM));
+  // console.log(mymap.unproject(cM));
   mymap.setView(mymap.unproject(cM), zoomLvl, {animate: true});
 });
 
@@ -63,30 +80,15 @@ function locate() {
   L.marker(userLocation, {icon: myUserIcon}).addTo(mymap);
 }
 
-
-
-
-var from = mymap.latLngToLayerPoint([40.7289254,-73.9790508])
-var to = mymap.latLngToLayerPoint([40.7289954,-79.9999508])
-var meters = from.distanceTo(to)
-
+// Calculates distances beteen two points in meters
 function convertMetersToFeet(meters) {
-	if (meters < (0)) {
-		return 'input cannot be less than zero'; 
-	} else {
-		return (meters/0.3048).toFixed(0);
-	}
+	return (meters/0.3048).toFixed(0);
 }
+
+// Converts meters into Miles
 function getMiles(i) {
-     return i*0.000621371192;
+	return i*0.000621371192;
 }
-console.log(getMiles(meters) + " Miles")
-console.log(convertMetersToFeet(meters) + "ft")
-
-
-
 
 getBikeStation()
-
-// User current location
 locate()
