@@ -40,15 +40,15 @@ const from = mymap.latLngToLayerPoint(userLocation)
 // Sets map tile template
 L.tileLayer('https://maps.heigit.org/openmapsurfer/tiles/roads/webmercator/{z}/{x}/{y}.png', {
 	maxZoom: 19,
-	attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> | Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	attribution: 'Imagery from <a href="https://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> | Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(mymap);
 
 // Map Bike Icon URL and size
-myIcon = L.icon({iconUrl: 'http://www.altairapps.com/images/apps/icon_divvybikes.png', iconSize: [30, 30]});
+myIcon = L.icon({iconUrl: 'https://www.altairapps.com/images/apps/icon_divvybikes.png', iconSize: [30, 30]});
 myUserIcon = L.icon({iconUrl: 'https://i.graphicmama.com/uploads/2019/5/5cf0f3559404b-cartoon-man-dressed-as-lumberjack-vector-character-1.png', iconSize: [60, 60]});
 
 // City Bike API (Free Opensource API)
-const api_url = 'http://api.citybik.es/v2/networks/citi-bike-nyc';
+const api_url = 'https://api.citybik.es/v2/networks/citi-bike-nyc';
 
 // Amount of stations we will search
 let bikeStations = 50;
