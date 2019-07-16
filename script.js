@@ -44,7 +44,7 @@ L.tileLayer('https://maps.heigit.org/openmapsurfer/tiles/roads/webmercator/{z}/{
 }).addTo(mymap);
 
 // Map Bike Icon URL and size
-myIcon = L.icon({iconUrl: 'https://www.altairapps.com/images/apps/icon_divvybikes.png', iconSize: [30, 30]});
+myIcon = L.icon({iconUrl: 'http://www.altairapps.com/images/apps/icon_divvybikes.png', iconSize: [30, 30]});
 myUserIcon = L.icon({iconUrl: 'https://i.graphicmama.com/uploads/2019/5/5cf0f3559404b-cartoon-man-dressed-as-lumberjack-vector-character-1.png', iconSize: [60, 60]});
 
 // City Bike API (Free Opensource API)
