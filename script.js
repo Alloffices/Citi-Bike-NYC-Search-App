@@ -70,8 +70,8 @@ async function getBikeStation() {
 		// Where `1` below is the amount you want to move it.
 		let meters = from.distanceTo(to) // Calculates distances between two points in meters
 		var milesAway = getMiles(meters).toFixed(3); // Converts meters between 2 points into miles
-		milesAway /= Math.pow(10, -2); // moves the decimal place 2 points to the right
-		let statDistance = "<b>Station is: </b>" + milesAway + " Miles away";
+		milesAway /= Math.pow(10, -2);; // moves the decimal place 2 points to the right
+		let statDistance = "<b>Station is: </b>" + prettyFloat(milesAway, 2, true) + " Miles away"; // Using prettyFloat to prevent trailing decimal numbers reference prettyFloat.js
 
 		// Name of station
 	  const stationName =  "<b>Location:</b> "+''+data.network.stations[i].name+' '+"<br />";
@@ -90,7 +90,7 @@ async function getBikeStation() {
 	  const emptySlots = "<b>Empty Slots:</b> "+''+data.network.stations[i].empty_slots+' '+"<br />";
 
 		// Append station in wrapper cards
-	  await addDomElements(data.network.stations[i].name, data.network.stations[i].free_bikes, data.network.stations[i].empty_slots, milesAway)
+	  await addDomElements(data.network.stations[i].name, data.network.stations[i].free_bikes, data.network.stations[i].empty_slots, prettyFloat(milesAway, 2, true))
 
 		// Displays each marker on map
 		L.marker([latitude, longitude], {icon: myIcon}).addTo(mymap).bindPopup(stationName + stationUpdatedData + popUpTxt + emptySlots + statDistance );
